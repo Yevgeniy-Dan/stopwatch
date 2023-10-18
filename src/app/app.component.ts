@@ -4,7 +4,14 @@
 
 import { Component } from '@angular/core';
 import { Subject, Subscription, fromEvent, timer } from 'rxjs';
-import { takeUntil, map, filter, buffer, debounceTime } from 'rxjs/operators';
+import {
+  take,
+  takeUntil,
+  map,
+  filter,
+  buffer,
+  debounceTime,
+} from 'rxjs/operators';
 import { convertTime } from './utils/utils';
 
 @Component({
@@ -57,7 +64,8 @@ export class AppComponent {
       buttonClick$
         .pipe(
           buffer(buttonClick$.pipe(debounceTime(300))),
-          filter((clicks) => clicks.length >= 2)
+          filter((clicks) => clicks.length === 2),
+          take(1)
         )
         .subscribe(() => this.stop$.next());
     }
@@ -68,6 +76,7 @@ export class AppComponent {
    */
   stopTimer(): void {
     this.stop$.next();
+    this.subscription.unsubscribe();
   }
 
   /**Reset timer's value to 00:00:00 */
