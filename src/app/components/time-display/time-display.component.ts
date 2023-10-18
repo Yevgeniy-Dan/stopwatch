@@ -10,5 +10,5 @@ import { Component, Input } from '@angular/core';
 })
 export class TimeDisplayComponent {
   /**input time value in HH:MM:SS format */
-  @Input() time?: string;
+  @Input() time?: number;
 }

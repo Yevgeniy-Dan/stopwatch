@@ -26,11 +26,8 @@ export class AppComponent {
   /** the variable is assigned a value after subscribing to the timer after start */
   subscription!: Subscription;
 
-  /** time in HH:MM:SS format which is string type*/
-  formatTime?: string;
-
   /** amount of time in seconds */
-  time: number = 0;
+  time: number = -new Date().getTimezoneOffset();
   /** emit event with stop trggier */
   private stop$ = new Subject<void>();
 
@@ -46,12 +43,12 @@ export class AppComponent {
     this.subscription = timer(0, 1000)
       .pipe(
         map(() => {
-          this.time++;
-          return convertTime(this.time);
+          this.time += 1000;
+          return this.time;
         }),
         takeUntil(this.stop$)
       )
-      .subscribe((value) => (this.formatTime = value));
+      .subscribe(() => {});
   }
 
   /**Stop a timer by double click with an interval of less than 300 ms*/
@@ -85,6 +82,5 @@ export class AppComponent {
 
     // Reset time property in order to start over
     this.time = 0;
-    this.formatTime = convertTime(this.time);
   }
 }
