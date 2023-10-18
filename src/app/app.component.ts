@@ -12,7 +12,6 @@ import {
   buffer,
   debounceTime,
 } from 'rxjs/operators';
-import { convertTime } from './utils/utils';
 
 @Component({
   selector: 'app-root',
@@ -31,14 +30,13 @@ export class AppComponent {
   /** emit event with stop trggier */
   private stop$ = new Subject<void>();
 
-  constructor() {}
-
   /**
    * Start the timer from the time it was stopped
    * The method monitors and assigns a new value to the "time" variable every second
    * and returns time in HH:MM:SS format
    *
    */
+
   startTimer(): void {
     this.subscription = timer(0, 1000)
       .pipe(
