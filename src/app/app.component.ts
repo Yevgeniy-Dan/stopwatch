@@ -2,7 +2,7 @@
  The main application component containing the start, stop, pause, and reset methods
  */
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject, Subscription, fromEvent, timer } from 'rxjs';
 import {
   take,
@@ -18,17 +18,18 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  /**Application title */
-  title: string = 'Stopwatch';
-
+export class AppComponent implements OnDestroy {
   /** the variable is assigned a value after subscribing to the timer after start */
   subscription!: Subscription;
 
   /** amount of time in seconds */
-  time: number = -new Date().getTimezoneOffset();
+  time: number = -new Date().getTimezoneOffset(); //  is used to initialize the timer with a consistent starting point across timezones
   /** emit event with stop trggier */
   private stop$ = new Subject<void>();
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   /**
    * Start the timer from the time it was stopped
@@ -36,13 +37,11 @@ export class AppComponent {
    * and returns time in HH:MM:SS format
    *
    */
-
   startTimer(): void {
     this.subscription = timer(0, 1000)
       .pipe(
         map(() => {
           this.time += 1000;
-          return this.time;
         }),
         takeUntil(this.stop$)
       )

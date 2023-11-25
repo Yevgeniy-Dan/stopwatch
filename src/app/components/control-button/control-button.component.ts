@@ -9,12 +9,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./control-button.component.css'],
 })
 export class ControlButtonComponent {
-  /**Buttonc icon */
+  /** button icon */
   @Input() icon!: string;
-  /**emit event when button clicked */
+
+  /** emit event when button clicked */
   @Output() btnClick = new EventEmitter<string>();
 
-  /**emit event method */
+  /**
+   * emit event method
+   */
   onClick() {
     this.btnClick.emit();
   }
